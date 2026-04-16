@@ -103,6 +103,12 @@
 </head>
 <body>
     <h1>Lista de Oficinas</h1>
+     <!-- MENSAJE AQUÍ -->
+    @if (session('success'))
+        <div style="background:#d4edda; color:#155724; padding:10px; margin-bottom:15px; border-radius:5px; text-align:center;">
+            {{ session('success') }}
+        </div>
+    @endif
     <a href="/oficinas/create">Crear Oficina</a>
 
      <a href="/" class="volver derecha">⬅ Volver al menú</a>

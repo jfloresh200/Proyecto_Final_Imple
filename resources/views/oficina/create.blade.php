@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Cliente</title>
+    <title>Crear Oficina</title>
+
     <style>
-        
         body {
             font-family: Arial, sans-serif;
             background-color: #fdf6f0; 
@@ -56,32 +56,92 @@
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: 0.3s;
         }
 
         button:hover {
             background-color: #8b5e3c;
         }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
-    <form action="/oficinas" method="POST">
+
+<form action="/oficinas" method="POST">
     @csrf
+
     <h1>Crear Oficina</h1>
 
+    <!-- MENSAJES -->
+    @if ($errors->any())
+        <div class="error">
+            {{ $errors->first() }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- CAMPOS -->
     <label>Ciudad</label>
-    <input type="text" name="Ciudad" pattern="[A-Za-z\s]+" title="Solo letras" required>
+    <input 
+        type="text" 
+        name="Ciudad" 
+        value="{{ old('Ciudad') }}" 
+        pattern="[A-Za-z\s]+" 
+        title="Solo letras"
+        required
+    >
 
     <label>Dirección</label>
-    <input type="text" name="Direccion"  pattern="[A-Za-z\s]+" title="Solo letras" required>
+    <input 
+        type="text" 
+        name="Direccion" 
+        value="{{ old('Direccion') }}" 
+        required
+    >
 
     <label>Código Postal</label>
-    <input type="text" name="CodigoPostal" pattern="[0-9]+" title="Solo números" required>
+    <input 
+        type="text" 
+        name="CodigoPostal" 
+        value="{{ old('CodigoPostal') }}" 
+        pattern="[0-9]+" 
+        title="Solo números"
+        required
+    >
 
     <label>Teléfono</label>
-    <input type="text" name="Telefono" pattern="[0-9]+" title="Solo números" required>
+    <input 
+        type="text" 
+        name="Telefono" 
+        value="{{ old('Telefono') }}" 
+        pattern="[0-9]+" 
+        title="Solo números"
+        required
+    >
 
     <button type="submit">Guardar Oficina</button>
+
 </form>
+
 </body>
 </html>

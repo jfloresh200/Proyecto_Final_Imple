@@ -31,19 +31,28 @@ class OficinaController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $oficina = new Oficina();
+       // VALIDACIÓN
+    $request->validate([
+        'Ciudad' => 'required|string',
+        'Direccion' => 'required|string|unique:oficinas,Direccion',
+        'CodigoPostal' => 'required|numeric',
+        'Telefono' => 'required|numeric'
+    ], [
+        'Direccion.unique' => 'Esta oficina ya está registrada'
+    ]);
 
-        $oficina->Ciudad = $request->get('Ciudad');
-        $oficina->Direccion = $request->get('Direccion');
-        $oficina->CodigoPostal = $request->get('CodigoPostal');
-        $oficina->Telefono = $request->get('Telefono');
-        $oficina->activooficina = 1;
+    // GUARDAR
+    $oficina = new Oficina();
+    $oficina->Ciudad = $request->get('Ciudad');
+    $oficina->Direccion = $request->get('Direccion');
+    $oficina->CodigoPostal = $request->get('CodigoPostal');
+    $oficina->Telefono = $request->get('Telefono');
+    $oficina->activooficina = 1;
 
-        $oficina->save();
+    $oficina->save();
 
-        return redirect('/oficinas');
-    }
+     return redirect('/oficinas')->with('success', 'Oficina guardada correctamente');
+      }
 
     /**
      * Display the specified resource.
@@ -71,15 +80,24 @@ class OficinaController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $oficina = Oficina::find($id);
-        $oficina->Ciudad = $request->get('Ciudad');
-        $oficina->Direccion = $request->get('Direccion');
-        $oficina->CodigoPostal = $request->get('CodigoPostal');
-        $oficina->Telefono = $request->get('Telefono');
-        $oficina->activooficina = 1;
-        $oficina->save();
+  $request->validate([
+    'Ciudad' => 'required|string',
+    'Direccion' => 'required|string|unique:oficinas,Direccion,' . $id,
+    'CodigoPostal' => 'required|numeric',
+    'Telefono' => 'required|numeric'
+], [
+    'Direccion.unique' => 'Esta oficina ya está registrada'
+]);
 
-        return redirect('/oficinas');
+    $oficina = Oficina::find($id);
+    $oficina->Ciudad = $request->get('Ciudad');
+    $oficina->Direccion = $request->get('Direccion');
+    $oficina->CodigoPostal = $request->get('CodigoPostal');
+    $oficina->Telefono = $request->get('Telefono');
+    $oficina->activooficina = 1;
+    $oficina->save();
+
+    return redirect('/oficinas')->with('success', 'Oficina actualizada correctamente');
     }
 
     /**

@@ -31,14 +31,24 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $cliente = new Cliente();
-        $cliente->DNI = $request->DNI;
-        $cliente->Nombre = $request->Nombre;
-        $cliente->activocliente = 1;
-        $cliente->save();
+      
+    // VALIDACIÓN
+    $request->validate([
+        'DNI' => 'required|digits:13|unique:clientes,DNI',
+        'Nombre' => 'required|string'
+    ], [
+        'DNI.unique' => 'Cliente ya registrado',
+        'DNI.digits' => 'El DNI debe tener 13 números'
+    ]);
 
-        return redirect('/clientes');
+    // GUARDAR
+    $cliente = new Cliente();
+    $cliente->DNI = $request->DNI;
+    $cliente->Nombre = $request->Nombre;
+    $cliente->activocliente = 1;
+    $cliente->save();
+
+    return redirect('/clientes')->with('success', 'Cliente guardado correctamente');
     }
 
     /**

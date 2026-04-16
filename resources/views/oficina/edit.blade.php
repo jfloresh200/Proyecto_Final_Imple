@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Oficina</title>
+
     <style>
-        
         body {
             font-family: Arial, sans-serif;
             background-color: #fdf6f0; 
@@ -56,11 +56,18 @@
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
         button:hover {
             background-color: #8b5e3c;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -72,19 +79,51 @@
 
     <h1>Editar Oficina</h1>
 
-    <label for="Ciudad">Ciudad</label>
-    <input type="text" name="Ciudad" value="{{ $oficinaE->Ciudad }}">
+    <!-- ERRORES -->
+    @if ($errors->any())
+        <div class="error">
+            {{ $errors->first() }}
+        </div>
+    @endif
 
-    <label for="Direccion">Dirección</label>
-    <input type="text" name="Direccion" value="{{ $oficinaE->Direccion }}">
+    <!-- CAMPOS -->
+    <label>Ciudad</label>
+    <input 
+        type="text" 
+        name="Ciudad" 
+        value="{{ old('Ciudad', $oficinaE->Ciudad) }}" 
+        pattern="[A-Za-z\s]+" 
+        required
+    >
 
-    <label for="CodigoPostal">Código Postal</label>
-    <input type="text" name="CodigoPostal" value="{{ $oficinaE->CodigoPostal }}">
+    <label>Dirección</label>
+    <input 
+        type="text" 
+        name="Direccion" 
+        value="{{ old('Direccion', $oficinaE->Direccion) }}" 
+        required
+    >
 
-    <label for="Telefono">Teléfono</label>
-    <input type="text" name="Telefono" value="{{ $oficinaE->Telefono }}">
+    <label>Código Postal</label>
+    <input 
+        type="text" 
+        name="CodigoPostal" 
+        value="{{ old('CodigoPostal', $oficinaE->CodigoPostal) }}" 
+        pattern="[0-9]+" 
+        required
+    >
+
+    <label>Teléfono</label>
+    <input 
+        type="text" 
+        name="Telefono" 
+        value="{{ old('Telefono', $oficinaE->Telefono) }}" 
+        pattern="[0-9]+" 
+        required
+    >
 
     <button type="submit">Actualizar Oficina</button>
+
 </form>
 
 </body>

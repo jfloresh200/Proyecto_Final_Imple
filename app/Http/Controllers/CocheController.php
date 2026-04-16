@@ -20,19 +20,31 @@ class CocheController extends Controller
 
     public function store(Request $request)
     {
-        $coches = new Coche();
+        $request->validate([
+        'Matricula' => 'required|unique:coches,Matricula',
+        'Marca' => 'required|string',
+        'Modelo' => 'required|string',
+        'Grupo' => 'required|string',
+        'NumeroPuertas' => 'required|numeric',
+        'EdadMinima' => 'required|numeric',
+        'CodOficina' => 'required|numeric'
+    ], [
+        'Matricula.unique' => 'Este coche ya está registrado'
+    ]);
 
-        $coches->Matricula = $request->get('Matricula');
-        $coches->Marca = $request->get('Marca');
-        $coches->Modelo = $request->get('Modelo');
-        $coches->Grupo = $request->get('Grupo');
-        $coches->NumeroPuertas = $request->get('NumeroPuertas');
-        $coches->EdadMinima = $request->get('EdadMinima');
-        $coches->CodOficina = $request->get('CodOficina');
+    $coches = new Coche();
 
-        $coches->save();
+    $coches->Matricula = $request->get('Matricula');
+    $coches->Marca = $request->get('Marca');
+    $coches->Modelo = $request->get('Modelo');
+    $coches->Grupo = $request->get('Grupo');
+    $coches->NumeroPuertas = $request->get('NumeroPuertas');
+    $coches->EdadMinima = $request->get('EdadMinima');
+    $coches->CodOficina = $request->get('CodOficina');
 
-        return redirect('/coches');
+    $coches->save();
+
+    return redirect('/coches')->with('success', 'Coche guardado correctamente');
     }
 
     public function show(string $id)
@@ -49,19 +61,32 @@ class CocheController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $coches = Coche::where('Matricula', $id)->first();
+       
+    $request->validate([
+        'Matricula' => 'required|unique:coches,Matricula,' . $id . ',Matricula',
+        'Marca' => 'required|string',
+        'Modelo' => 'required|string',
+        'Grupo' => 'required|string',
+        'NumeroPuertas' => 'required|numeric',
+        'EdadMinima' => 'required|numeric',
+        'CodOficina' => 'required|numeric'
+    ], [
+        'Matricula.unique' => 'Esta matrícula ya está registrada'
+    ]);
 
-        $coches->Matricula = $request->get('Matricula');
-        $coches->Marca = $request->get('Marca');
-        $coches->Modelo = $request->get('Modelo');
-        $coches->Grupo = $request->get('Grupo');
-        $coches->NumeroPuertas = $request->get('NumeroPuertas');
-        $coches->EdadMinima = $request->get('EdadMinima');
-        $coches->CodOficina = $request->get('CodOficina');
+    $coches = Coche::where('Matricula', $id)->first();
 
-        $coches->save();
+    $coches->Matricula = $request->get('Matricula');
+    $coches->Marca = $request->get('Marca');
+    $coches->Modelo = $request->get('Modelo');
+    $coches->Grupo = $request->get('Grupo');
+    $coches->NumeroPuertas = $request->get('NumeroPuertas');
+    $coches->EdadMinima = $request->get('EdadMinima');
+    $coches->CodOficina = $request->get('CodOficina');
 
-        return redirect('/coches');
+    $coches->save();
+
+    return redirect('/coches')->with('success', 'Coche actualizado correctamente');
     }
 
     public function destroy(string $id)

@@ -52,18 +52,38 @@ class AlquilerController extends Controller
      */
     public function store(Request $request)
     {
-        $alquiler = new Alquiler();
+         $request->validate([
+        'Matricula' => 'required',
+        'DNI' => 'required',
+        'Seguro' => 'required|string',
+        'Precio' => 'required|numeric',
+        'DiasCon' => 'required|numeric'
+    ]);
 
-        $alquiler->Matricula = $request->get('Matricula');
-        $alquiler->DNI = $request->get('DNI');
-        $alquiler->Seguro = $request->get('Seguro');
-        $alquiler->Precio = $request->get('Precio');
-        $alquiler->DiasCon = $request->get('DiasCon');
-        $alquiler->estados = 'activo';
 
-        $alquiler->save();
+    $existe = Alquiler::where('Matricula', $request->Matricula)
+        ->where('DNI', $request->DNI)
+        ->where('estados', 'activo')
+        ->first();
 
-        return redirect('/alquileres');
+    if ($existe) {
+        return redirect()->back()->withErrors([
+            'error' => 'Este cliente ya tiene este coche alquilado'
+        ]);
+    }
+
+    $alquiler = new Alquiler();
+
+    $alquiler->Matricula = $request->get('Matricula');
+    $alquiler->DNI = $request->get('DNI');
+    $alquiler->Seguro = $request->get('Seguro');
+    $alquiler->Precio = $request->get('Precio');
+    $alquiler->DiasCon = $request->get('DiasCon');
+    $alquiler->estados = 'activo';
+
+    $alquiler->save();
+
+    return redirect('/alquileres')->with('success', 'Alquiler creado correctamente');
     }
 
     /**
@@ -91,15 +111,15 @@ class AlquilerController extends Controller
     {
         $alquiler = Alquiler::find($id);
 
-        $alquiler->Matricula = $request->get('Matricula');
-        $alquiler->DNI = $request->get('DNI');
-        $alquiler->Seguro = $request->get('Seguro');
-        $alquiler->Precio = $request->get('Precio');
-        $alquiler->DiasCon = $request->get('DiasCon');
+    $alquiler->Matricula = $request->get('Matricula');
+    $alquiler->DNI = $request->get('DNI');
+    $alquiler->Seguro = $request->get('Seguro');
+    $alquiler->Precio = $request->get('Precio');
+    $alquiler->DiasCon = $request->get('DiasCon');
 
-        $alquiler->save();
+    $alquiler->save();
 
-        return redirect('/alquileres');
+    return redirect('/alquileres')->with('success', 'Alquiler actualizado correctamente');
     }
 
     /**
