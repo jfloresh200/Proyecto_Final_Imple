@@ -75,14 +75,26 @@ class ClienteController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-        Cliente::where('DNI',$id)->update([
-        'DNI' => $request->DNI,
-        'Nombre' => $request->Nombre]);
-         $cliente->activocliente = 1;
+        
+    $request->validate([
+        'DNI' => 'required|digits:13|unique:clientes,DNI,' . $id . ',DNI',
+        'Nombre' => 'required|string'
+    ], [
+        'DNI.unique' => 'Cliente ya registrado',
+        'DNI.digits' => 'El DNI debe tener 13 números'
+    ]);
 
-        return redirect('/clientes');
-    }
+    
+    Cliente::where('DNI', $id)->update([
+        'DNI' => $request->DNI,
+        'Nombre' => $request->Nombre,
+        'activocliente' => 1
+    ]);
+
+    return redirect('/clientes')->with('success', 'Cliente actualizado correctamente');
+}
+    
+    
 
     /**
      * Remove the specified resource from storage.

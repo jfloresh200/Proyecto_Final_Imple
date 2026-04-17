@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Cliente</title>
+
     <style>
-        
         body {
             font-family: Arial, sans-serif;
             background-color: #fdf6f0; 
@@ -56,14 +56,26 @@
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
-        button:hover {
-            background-color: #8b5e3c;
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
+
 <body>
 
 <form action="/clientes/{{$cliente->DNI}}" method="POST">
@@ -72,15 +84,36 @@
 
     <h1>Editar Cliente</h1>
 
-    <label for="DNI">DNI</label>
-    <input type="text" name="DNI" value="{{ $cliente->DNI }}">
+    
+    @if ($errors->any())
+        <div class="error">
+            {{ $errors->first() }}
+        </div>
+    @endif
 
-    <label for="Nombre">Nombre</label>
-    <input type="text" name="Nombre" value="{{ $cliente->Nombre }}">
+    
+    @if (session('success'))
+        <div class="success">
+            {{ session('success') }}
+        </div>
+    @endif
 
+    <label>DNI</label>
+    <input type="text" name="DNI"
+        value="{{ old('DNI', $cliente->DNI) }}"
+        pattern="[0-9]{13}"
+        title="Debe tener 13 números"
+        required>
 
+    <label>Nombre</label>
+    <input type="text" name="Nombre"
+        value="{{ old('Nombre', $cliente->Nombre) }}"
+        pattern="[A-Za-z\s]+"
+        title="Solo letras"
+        required>
 
     <button type="submit">Actualizar Cliente</button>
+
 </form>
 
 </body>
